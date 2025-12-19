@@ -39,19 +39,50 @@ int main(int argc, char**argv){
     setbuf(stdout, NULL); //advisable for better debugging output
 
     if (argc < 3){
-        std::cout << "usage: " << argv[0] << " <input file> <dim for pca>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input file> <dim for pca> [-d]" << std::endl;
         return 1;
     }
 
-    std::cout << "Performing PCA on " << argv[1] << ", finding " << argv[2] << " principle components" << std::endl;
+    bool debugMode = false;
+    std::string matrixFile;
+    unsigned int targetDimension = 0 ;
+
+    for (unsigned int argIter = 1; argIter<argc; ++argIter){
+        std::string flag = argv[argIter];
+
+        if (flag=="-d" || flag=="-debug"){
+            debugMode = true;
+        }
+        else if (matrixFile.empty()){
+            matrixFile = flag;
+        }
+        else{
+            targetDimension = std::stoi(flag);
+        }
+    }
+
+    if (debugMode){
+        std::cout << "Debug mode on" << std::endl;
+    }
+    else
+    {
+        std::cout << "Debug mode off" << std::endl;
+    }
+
+    std::cout << "Performing PCA on " << matrixFile << ", finding " << targetDimension << " principle components" << std::endl;
     
 
     unsigned int rowCount, colCount;
-    std::string matrixFile = argv[1];
 
     int* inputMatrixHost = loadMatrix(matrixFile, rowCount, colCount);
 
-    
+    if (debugMode){
+        std::cout << "Verifying correct input matrix allocation, printing elements for first row:" << std::endl;
+        for (unsigned int e = 0; e < colCount; ++e){
+            std::cout << inputMatrixHost[e] << ", ";
+        }
+        std::cout << std::endl;
+    }
 
 
     //at the end, free allocated memory
