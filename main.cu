@@ -84,6 +84,19 @@ int main(int argc, char**argv){
         std::cout << std::endl;
     }
     
+    //NEXT STEPS
+
+    //kernel 1
+    //center the data - subtract by mean AND divide by standard deviation
+
+    //kernel 2
+    //covariance matrix
+
+    //kernel 3
+    //find eigenvalues and eigenvectors
+
+    //kernel 4
+    //project the data
 
 
     //at the end, free allocated memory
