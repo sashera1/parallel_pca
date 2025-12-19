@@ -15,7 +15,7 @@ int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &co
     }
 
     if (!(infile >> rowCount >> colCount)) {
-        std::cerr << "Issue reading matrix dimenstions" << std::endl;
+        std::cerr << "Issue reading matrix dimenstions\n";
         exit(1);
     }
 
@@ -39,7 +39,7 @@ int main(int argc, char**argv){
     setbuf(stdout, NULL); //advisable for better debugging output
 
     if (argc < 3){
-        std::cout << "usage: " << argv[0] << " <input file> <dim for pca> [-d]" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input file> <dim for pca> [-d]\n";
         return 1;
     }
 
@@ -62,14 +62,14 @@ int main(int argc, char**argv){
     }
 
     if (debugMode){
-        std::cout << "Debug mode on" << std::endl;
+        std::cout << "Debug mode on\n";
     }
     else
     {
-        std::cout << "Debug mode off" << std::endl;
+        std::cout << "Debug mode off\n";
     }
 
-    std::cout << "Performing PCA on " << matrixFile << ", finding " << targetDimension << " principle components" << std::endl;
+    std::cout << "Performing PCA on " << matrixFile << ", finding " << targetDimension << " principle components\n";
     
 
     unsigned int rowCount, colCount;
@@ -77,12 +77,13 @@ int main(int argc, char**argv){
     int* inputMatrixHost = loadMatrix(matrixFile, rowCount, colCount);
 
     if (debugMode){
-        std::cout << "Verifying correct input matrix allocation, printing elements for first row:" << std::endl;
+        std::cout << "Verifying correct input matrix allocation, printing elements for first row:\n";
         for (unsigned int e = 0; e < colCount; ++e){
             std::cout << inputMatrixHost[e] << ", ";
         }
         std::cout << std::endl;
     }
+    
 
 
     //at the end, free allocated memory
