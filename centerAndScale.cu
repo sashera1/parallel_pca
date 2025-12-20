@@ -3,6 +3,11 @@
 
 #include "centerAndScale.h"
 
+__global__ void centerAndScaleKernel(int* inputMatrix, int* outputMatrix, int rowCount, int colCount){
+
+
+}
+
 int* centerAndScaleWrapper(int* inputMatrixHost, int rowCount, int colCount, bool debugMode){
     
     if (debugMode){
@@ -10,6 +15,9 @@ int* centerAndScaleWrapper(int* inputMatrixHost, int rowCount, int colCount, boo
     }
     
     int *scaledMatrixHost = (int *) malloc(rowCount*colCount*sizeof(int));
+
+    int threadsNeeded = colCount; //one thread per column: may need more than this
+
 
 
 
