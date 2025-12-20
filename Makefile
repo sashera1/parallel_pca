@@ -1,6 +1,6 @@
 NVCC = nvcc
 TARGET = pca
-SRC = main.cu
+SRC = main.cu centerAndScale.cu
 
 $(TARGET): $(SRC)
 	$(NVCC) -o $(TARGET) $(SRC)

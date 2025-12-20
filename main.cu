@@ -3,7 +3,9 @@
 #include <string>
 #include <iostream> //for cout, cerr, endl
 #include <fstream> //for ifstream
-#include <cstdlib> //for mallc, exit
+#include <cstdlib> //for malloc, exit
+
+#include "centerAndScale.h" //first kernel wrapper: center and scale the matrix
 
 
 int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &colCount){
@@ -83,11 +85,14 @@ int main(int argc, char**argv){
         }
         std::cout << std::endl;
     }
+
+    
     
     //NEXT STEPS
 
     //kernel 1
-    //center the data - subtract by mean AND divide by standard deviation
+    //center the data - do mean AND variance / standard deviation
+    int* scaledMatrixHost = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
 
     //kernel 2
     //covariance matrix
@@ -101,5 +106,6 @@ int main(int argc, char**argv){
 
     //at the end, free allocated memory
     free(inputMatrixHost);
+    free(scaledMatrixHost);
     return 0;
 }
