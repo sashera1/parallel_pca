@@ -92,7 +92,7 @@ int main(int argc, char**argv){
 
     //kernel 1
     //center the data - do mean AND variance / standard deviation
-    float* scaledMatrixHost = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
+    float* scaledMatrixDevice = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
 
     //kernel 2
     //covariance matrix
@@ -106,6 +106,10 @@ int main(int argc, char**argv){
 
     //at the end, free allocated memory
     free(inputMatrixHost);
-    free(scaledMatrixHost);
+
+    //may make sense to put this within a kernel, as it is created within a kernel
+    //dont know when it stops being needed though, so for now put at end
+    cudaFree(scaledMatrixDevice);
+
     return 0;
 }
