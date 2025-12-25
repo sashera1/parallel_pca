@@ -8,7 +8,7 @@
 #include "centerAndScale.h" //first kernel wrapper: center and scale the matrix
 
 
-int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &colCount){
+float* loadMatrix(std::string matrixFile, unsigned float &rowCount, unsigned float &colCount){
     std::ifstream infile(matrixFile);
 
     if (!infile.is_open()){
@@ -23,7 +23,7 @@ int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &co
 
     std::cout << "Reading " << matrixFile << ", of dimensions " << rowCount << " * " << colCount << std::endl;
 
-    int *matrix = (int *) malloc(rowCount*colCount*sizeof(int));
+    float *matrix = (float *) malloc(rowCount*colCount*sizeof(float));
 
     for (unsigned int r = 0; r < rowCount; r++){
         for (unsigned int c = 0; c < colCount; c++){
@@ -76,7 +76,7 @@ int main(int argc, char**argv){
 
     unsigned int rowCount, colCount;
 
-    int* inputMatrixHost = loadMatrix(matrixFile, rowCount, colCount);
+    float* inputMatrixHost = loadMatrix(matrixFile, rowCount, colCount);
 
     if (debugMode){
         std::cout << "Verifying correct input matrix allocation, printing elements for first row:\n";
@@ -92,7 +92,7 @@ int main(int argc, char**argv){
 
     //kernel 1
     //center the data - do mean AND variance / standard deviation
-    int* scaledMatrixHost = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
+    float* scaledMatrixHost = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
 
     //kernel 2
     //covariance matrix
