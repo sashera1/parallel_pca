@@ -12,15 +12,27 @@ __global__ void centerAndScaleKernel(int* inputMatrix, int* outputMatrix, int ro
     int sumOfVals = 0;
     unsigned int threadIdGlobal = BlockIdx.x * BlockDim.x + threadIdx.x;
     if (threadIdGlobal < colCount){
-        for (unsigned int row = 0; row < rowcount; ++row){
+        for (unsigned int row = 0; row < rowCount; ++row){
             int val = inputMatrix[row*rowCount + threadIdGlobal];
             sumOfVals+=val;
             column[row*rowCount + threadIdx.x] = val;
         }
-    }
+    
     //at this point, shared mem is populated with raw values
 
-    
+    //go thru and for each val
+    //accumulate difference square between val mean
+    //and subtract mean from val in sm
+    int sumOfDifSquared = 0;
+        for (unsigned int row = 0; row < rowCount; ++row){
+
+        }
+
+
+    //once done, divide accumulation of squared differences by rowCount-1 to get standard d
+    //then go thru and dvidie each val by standard dev
+    }
+
 
 
 
