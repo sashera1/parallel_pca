@@ -54,11 +54,8 @@ float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount,
 
     size_t matrixSize = rowCount*colCount*sizeof(float)
     
-    float *scaledMatrixHost = (float *) malloc(matrixSize);
-
     unsigned int threadsPerBlock = 32;
     unsigned int blockCount = (colCount + threadsPerBlock - 1) / threadsPerBlock;
-
     unsigned int sharedMemoryPerBlock = threadsPerBlock * rowCount * sizeof(float);
 
     if (debugMode){
@@ -75,11 +72,12 @@ float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount,
     centerAndScaleKernel<<<blockCount,threadsPerBlock,sharedMemoryPerBlock>>>(
         inputMatrixDevice,scaledMatrixDevice,rowCount,colCount);
 
-    cudaMemcpy(scaledMatrixHost,scaledMatrixDevice,matrixSize,cudaMemcpyDeviceToHost);
-
     cudaFree(inputMatrixDevice);
-    cudaFree(scaledMatrixDevice);
 
-    return scaledMatrixHost;
+    //do not free or return scaledMatrixDevice: use as input for next kernel
+    //cudaFree(scaledMatrixDevice);
+
+    //pointer to scaled matrix in device
+    return scaledMatrixDevice;
 }
 
