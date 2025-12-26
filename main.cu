@@ -94,6 +94,10 @@ int main(int argc, char**argv){
     //center the data - do mean AND variance / standard deviation
     float* scaledMatrixDevice = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
 
+    if(debugMode){
+        std::cout << "Successfully exited center and scale\n"
+    }
+
     //kernel 2
     //covariance matrix
 

@@ -1,8 +1,9 @@
 NVCC = nvcc
 TARGET = pca
 SRC = main.cu centerAndScale.cu
+HEADERS = util.h
 
-$(TARGET): $(SRC)
+$(TARGET): $(SRC) $(HEADERS)
 	$(NVCC) -o $(TARGET) $(SRC)
 
 clean:
