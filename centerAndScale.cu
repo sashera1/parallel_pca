@@ -1,5 +1,6 @@
 #include <cstdlib> //for malloc
 #include <iostream> //for cout
+#include "util.h" 
 
 #include "centerAndScale.h"
 
@@ -72,10 +73,17 @@ float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount,
     centerAndScaleKernel<<<blockCount,threadsPerBlock,sharedMemoryPerBlock>>>(
         inputMatrixDevice,scaledMatrixDevice,rowCount,colCount);
 
+    if (debugMode){
+        gpuErrorCheck(cudaPeekAtLastError());
+        gpuErrorCheck(cudaDeviceSynchronize());
+    }
+    else {
+        gpuErrorCheck(cudaGetLastError());
+    }
+
     cudaFree(inputMatrixDevice);
 
     //do not free or return scaledMatrixDevice: use as input for next kernel
-    //cudaFree(scaledMatrixDevice);
 
     //pointer to scaled matrix in device
     return scaledMatrixDevice;
