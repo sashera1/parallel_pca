@@ -4,6 +4,9 @@
 
 #include "centerAndScale.h"
 
+
+//MAY BE HAVING BANK CONFLICTS WITH SM - REEVALUATE THIS
+template <bool DEBUG>
 __global__ void centerAndScaleKernel(float* inputMatrix, float* outputMatrix, int rowCount, int colCount){
     //naive implementation:
     //one thread per column
@@ -44,7 +47,17 @@ __global__ void centerAndScaleKernel(float* inputMatrix, float* outputMatrix, in
             float val = column[row*blockDim.x + threadIdx.x];
             outputMatrix[row*colCount + threadIdGlobal] = val * standardDevInv;
         }
+
     }
+
+    if (DEBUG){
+        if (threadIdGlobal==0){
+            for(int i = 0; i < 32; ++i){
+                printf("Element[%d]: %f, ",i,outputMatrix[i*colCount]);
+            }
+        }
+    }
+
 }
 
 float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount, bool debugMode){
@@ -70,14 +83,17 @@ float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount,
     float* scaledMatrixDevice;
     cudaMalloc((void**)&scaledMatrixDevice, matrixSize);
 
-    centerAndScaleKernel<<<blockCount,threadsPerBlock,sharedMemoryPerBlock>>>(
-        inputMatrixDevice,scaledMatrixDevice,rowCount,colCount);
+    
 
     if (debugMode){
-        checkKernel(cudaPeekAtLastError());
+        centerAndScaleKernel<true><<<blockCount,threadsPerBlock,sharedMemoryPerBlock>>>(
+            inputMatrixDevice,scaledMatrixDevice,rowCount,colCount);
         checkKernel(cudaDeviceSynchronize());
+        checkKernel(cudaPeekAtLastError());
     }
     else {
+        centerAndScaleKernel<false><<<blockCount,threadsPerBlock,sharedMemoryPerBlock>>>(
+            inputMatrixDevice,scaledMatrixDevice,rowCount,colCount);
         checkKernel(cudaGetLastError());
     }
 
