@@ -8,7 +8,7 @@
 #include "centerAndScale.h" //first kernel wrapper: center and scale the matrix
 
 
-float* loadMatrix(std::string matrixFile, unsigned float &rowCount, unsigned float &colCount){
+float* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &colCount){
     std::ifstream infile(matrixFile);
 
     if (!infile.is_open()){
@@ -33,7 +33,7 @@ float* loadMatrix(std::string matrixFile, unsigned float &rowCount, unsigned flo
 
     return matrix;
 
-};
+}
 
 
 int main(int argc, char**argv){
