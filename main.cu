@@ -8,7 +8,7 @@
 #include "centerAndScale.h" //first kernel wrapper: center and scale the matrix
 
 
-int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &colCount){
+float* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &colCount){
     std::ifstream infile(matrixFile);
 
     if (!infile.is_open()){
@@ -23,7 +23,7 @@ int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &co
 
     std::cout << "Reading " << matrixFile << ", of dimensions " << rowCount << " * " << colCount << std::endl;
 
-    int *matrix = (int *) malloc(rowCount*colCount*sizeof(int));
+    float *matrix = (float *) malloc(rowCount*colCount*sizeof(float));
 
     for (unsigned int r = 0; r < rowCount; r++){
         for (unsigned int c = 0; c < colCount; c++){
@@ -32,8 +32,7 @@ int* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &co
     }
 
     return matrix;
-
-};
+}
 
 
 int main(int argc, char**argv){
@@ -76,7 +75,7 @@ int main(int argc, char**argv){
 
     unsigned int rowCount, colCount;
 
-    int* inputMatrixHost = loadMatrix(matrixFile, rowCount, colCount);
+    float* inputMatrixHost = loadMatrix(matrixFile, rowCount, colCount);
 
     if (debugMode){
         std::cout << "Verifying correct input matrix allocation, printing elements for first row:\n";
@@ -92,7 +91,11 @@ int main(int argc, char**argv){
 
     //kernel 1
     //center the data - do mean AND variance / standard deviation
-    int* scaledMatrixHost = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
+    float* scaledMatrixDevice = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
+
+    if(debugMode){
+        std::cout << "Successfully exited center and scale\n";
+    }
 
     //kernel 2
     //covariance matrix
@@ -106,6 +109,10 @@ int main(int argc, char**argv){
 
     //at the end, free allocated memory
     free(inputMatrixHost);
-    free(scaledMatrixHost);
+
+    //may make sense to put this within a kernel, as it is created within a kernel
+    //dont know when it stops being needed though, so for now put at end
+    cudaFree(scaledMatrixDevice);
+
     return 0;
 }
