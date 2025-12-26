@@ -74,11 +74,11 @@ float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount,
         inputMatrixDevice,scaledMatrixDevice,rowCount,colCount);
 
     if (debugMode){
-        gpuErrorCheck(cudaPeekAtLastError());
-        gpuErrorCheck(cudaDeviceSynchronize());
+        checkKernel(cudaPeekAtLastError());
+        checkKernel(cudaDeviceSynchronize());
     }
     else {
-        gpuErrorCheck(cudaGetLastError());
+        checkKernel(cudaGetLastError());
     }
 
     cudaFree(inputMatrixDevice);
