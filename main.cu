@@ -32,7 +32,6 @@ float* loadMatrix(std::string matrixFile, unsigned int &rowCount, unsigned int &
     }
 
     return matrix;
-
 }
 
 
@@ -95,7 +94,7 @@ int main(int argc, char**argv){
     float* scaledMatrixDevice = centerAndScaleWrapper(inputMatrixHost, rowCount, colCount, debugMode);
 
     if(debugMode){
-        std::cout << "Successfully exited center and scale\n"
+        std::cout << "Successfully exited center and scale\n";
     }
 
     //kernel 2

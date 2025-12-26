@@ -53,14 +53,14 @@ float* centerAndScaleWrapper(float* inputMatrixHost, int rowCount, int colCount,
         std::cout << "Entered centerAndScale file\n";
     }
 
-    size_t matrixSize = rowCount*colCount*sizeof(float)
+    size_t matrixSize = rowCount*colCount*sizeof(float);
     
     unsigned int threadsPerBlock = 32;
     unsigned int blockCount = (colCount + threadsPerBlock - 1) / threadsPerBlock;
     unsigned int sharedMemoryPerBlock = threadsPerBlock * rowCount * sizeof(float);
 
     if (debugMode){
-        std::count << "Requesting " << sharedMemoryPerBlock / 1024.0f << "KB shared memory per block\n";
+        std::cout << "Requesting " << sharedMemoryPerBlock / 1024.0f << "KB shared memory per block\n";
     }
 
     float* inputMatrixDevice;
